@@ -1,0 +1,436 @@
+{
+  "info": {
+    "name": "Planty API",
+    "description": "Full CRUD API for Planty — plant monitoring platform.\n\nBase URL: http://localhost:8080/api\n\n**Auth flow:**\n1. Register or Login to get a Bearer token\n2. Set the `token` collection variable (auto-set by Register/Login scripts)\n3. All protected endpoints use `{{token}}` in the Authorization header",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:8080/api" },
+    { "key": "token", "value": "" },
+    { "key": "plantId", "value": "" },
+    { "key": "roleId", "value": "" },
+    { "key": "targetUserId", "value": "" },
+    { "key": "deviceKey", "value": "" },
+    { "key": "deviceKeyId", "value": "" }
+  ],
+  "item": [
+    {
+      "name": "Health",
+      "item": [
+        {
+          "name": "Health Check",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/health"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Register",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "  var json = pm.response.json();",
+                  "  pm.collectionVariables.set('token', json.token);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/auth/register",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Armando\",\n  \"email\": \"armando@planty.io\",\n  \"password\": \"securepassword123\",\n  \"role\": \"admin\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "  var json = pm.response.json();",
+                  "  pm.collectionVariables.set('token', json.token);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/auth/login",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"armando@planty.io\",\n  \"password\": \"securepassword123\"\n}"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "User",
+      "item": [
+        {
+          "name": "Get Profile",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/user/profile",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ]
+          }
+        },
+        {
+          "name": "Update Profile",
+          "request": {
+            "method": "PUT",
+            "url": "{{baseUrl}}/user/profile",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Armando V.\",\n  \"email\": \"armando@planty.io\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Delete Profile",
+          "request": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/user/profile",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Plants",
+      "item": [
+        {
+          "name": "List Plants",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/plants",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ]
+          }
+        },
+        {
+          "name": "Create Plant",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "  var json = pm.response.json();",
+                  "  pm.collectionVariables.set('plantId', json.id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/plants",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Living Room Fern\",\n  \"species\": \"Boston Fern\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Get Plant",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/plants/{{plantId}}",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ]
+          }
+        },
+        {
+          "name": "Update Plant",
+          "request": {
+            "method": "PUT",
+            "url": "{{baseUrl}}/plants/{{plantId}}",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Kitchen Basil\",\n  \"species\": \"Sweet Basil\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Toggle Pump",
+          "request": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/plants/{{plantId}}/pump",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ]
+          }
+        },
+        {
+          "name": "Delete Plant",
+          "request": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/plants/{{plantId}}",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Sensor Readings",
+      "item": [
+        {
+          "name": "Create Reading",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/plants/{{plantId}}/readings",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"moisture\": 72.5,\n  \"pump_on\": false,\n  \"plant_mood\": \"happy\"\n}"
+            }
+          }
+        },
+        {
+          "name": "List Readings",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/plants/{{plantId}}/readings",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ]
+          }
+        },
+        {
+          "name": "Latest Reading",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/plants/{{plantId}}/readings/latest",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Roles",
+      "item": [
+        {
+          "name": "List Roles",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/roles",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ]
+          }
+        },
+        {
+          "name": "Get Role",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/roles/{{roleId}}",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ]
+          }
+        },
+        {
+          "name": "Create Role (admin)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "  var json = pm.response.json();",
+                  "  pm.collectionVariables.set('roleId', json.id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/roles",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"description\": \"moderator\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Update Role (admin)",
+          "request": {
+            "method": "PUT",
+            "url": "{{baseUrl}}/roles/{{roleId}}",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"description\": \"super-moderator\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Delete Role (admin)",
+          "request": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/roles/{{roleId}}",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ]
+          }
+        },
+        {
+          "name": "Assign Role to User (admin)",
+          "request": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/users/{{targetUserId}}/role",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"role_id\": \"{{roleId}}\"\n}"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Device Keys (Management)",
+      "description": "Manage static API keys for Arduino devices. Requires JWT auth.",
+      "item": [
+        {
+          "name": "Create Device Key",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "  var json = pm.response.json();",
+                  "  pm.collectionVariables.set('deviceKey', json.key);",
+                  "  pm.collectionVariables.set('deviceKeyId', json.id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/device-keys",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"plant_id\": \"{{plantId}}\",\n  \"label\": \"Living Room Arduino\"\n}"
+            }
+          }
+        },
+        {
+          "name": "List Device Keys",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/device-keys",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ]
+          }
+        },
+        {
+          "name": "Revoke Device Key",
+          "request": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/device-keys/{{deviceKeyId}}",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Device Endpoints (Arduino)",
+      "description": "Endpoints called by Arduino using X-Device-Key header. No JWT needed.",
+      "item": [
+        {
+          "name": "Device: Post Sensor Reading",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/device/readings",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "X-Device-Key", "value": "{{deviceKey}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"moisture\": 72.5,\n  \"pump_on\": false,\n  \"plant_mood\": \"happy\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Device: Get Pump Status",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/device/pump",
+            "header": [
+              { "key": "X-Device-Key", "value": "{{deviceKey}}" }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

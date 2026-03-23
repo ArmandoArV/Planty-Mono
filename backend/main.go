@@ -4,6 +4,8 @@ import (
 	"log"
 	"os"
 
+	"github.com/ArmandoArV/Planty-Mono/backend/config"
+	"github.com/ArmandoArV/Planty-Mono/backend/models"
 	"github.com/ArmandoArV/Planty-Mono/backend/routes"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
@@ -11,6 +13,10 @@ import (
 )
 
 func main() {
+	// Database
+	config.ConnectDB()
+	models.Migrate()
+
 	app := fiber.New()
 
 	// Logger middleware
@@ -22,7 +28,10 @@ func main() {
 		allowOrigin = "http://localhost:3000"
 	}
 	app.Use(cors.New(cors.Config{
-		AllowOrigins: allowOrigin,
+		AllowOrigins:  allowOrigin,
+		AllowHeaders:  "Origin, Content-Type, Accept, Authorization",
+		AllowMethods:  "GET, POST, PUT, PATCH, DELETE, OPTIONS",
+		ExposeHeaders: "Content-Length",
 	}))
 
 	// Register all routes
