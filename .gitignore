@@ -1,0 +1,14 @@
+# Root monorepo gitignore
+
+# Node / npm workspace
+node_modules/
+
+# Go build artifacts (compiled binaries)
+backend/backend
+backend/*.exe
+
+# macOS
+.DS_Store
+
+# Environment files
+.env*
