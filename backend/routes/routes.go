@@ -16,9 +16,10 @@ func Register(app *fiber.App) {
 	api.Post("/auth/login", controllers.Login)
 
 	// Device endpoints — authenticated via X-Device-Key header (for Arduino)
-	device := api.Group("/device", middleware.DeviceKeyRequired())
-	device.Post("/readings", controllers.DevicePostReading)
-	device.Get("/pump", controllers.DeviceGetPumpStatus)
+	// Middleware applied per-route (not on the group) to avoid prefix clash with /device-keys.
+	device := api.Group("/device")
+	device.Post("/readings", middleware.DeviceKeyRequired(), controllers.DevicePostReading)
+	device.Get("/pump", middleware.DeviceKeyRequired(), controllers.DeviceGetPumpStatus)
 
 	// Protected — require Bearer token
 	auth := api.Group("", middleware.AuthRequired())
