@@ -10,6 +10,7 @@ import {
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
+import logoPlanty from "../../../public/Images/logoPlanty.png";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useBreakpoint } from "../hooks";
@@ -27,7 +28,9 @@ export default function Navbar() {
   const { user, isAuthenticated, logout, loading } = useAuth();
   const router = useRouter();
 
-  const dashboardHref = isAuthenticated ? `/dashboard/${user?.id}` : "/dashboard/demo";
+  const dashboardHref = isAuthenticated
+    ? `/dashboard/${user?.id}`
+    : "/dashboard/demo";
 
   const handleLogout = () => {
     logout();
@@ -45,14 +48,18 @@ export default function Navbar() {
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2">
           <Image
-            src="/Images/logoPlanty.png"
+            src={logoPlanty}
             alt="Planty logo"
             width={36}
             height={36}
             className="object-contain"
             priority
           />
-          <Text weight="bold" size={500} className="tracking-tight text-foreground">
+          <Text
+            weight="bold"
+            size={500}
+            className="tracking-tight text-foreground"
+          >
             Planty
           </Text>
         </Link>
@@ -80,19 +87,32 @@ export default function Navbar() {
                   {user?.name}
                 </Text>
               </Link>
-              <Button appearance="subtle" size="small" icon={<SignOutRegular />} onClick={handleLogout}>
+              <Button
+                appearance="subtle"
+                size="small"
+                icon={<SignOutRegular />}
+                onClick={handleLogout}
+              >
                 Logout
               </Button>
             </>
           ) : (
             <>
               <Link href="/login">
-                <Button appearance="subtle" size="medium" icon={<PersonRegular />}>
+                <Button
+                  appearance="subtle"
+                  size="medium"
+                  icon={<PersonRegular />}
+                >
                   Login
                 </Button>
               </Link>
               <Link href="/login">
-                <Button appearance="primary" size="medium" className="rounded-full!">
+                <Button
+                  appearance="primary"
+                  size="medium"
+                  className="rounded-full!"
+                >
                   Pre-Order Now
                 </Button>
               </Link>
@@ -135,19 +155,35 @@ export default function Navbar() {
               <div className="flex flex-col gap-2 pt-2">
                 {!loading && isAuthenticated ? (
                   <>
-                    <Link href={dashboardHref} onClick={() => setMobileOpen(false)}>
-                      <Button appearance="subtle" icon={<PersonRegular />} className="w-full justify-start!">
+                    <Link
+                      href={dashboardHref}
+                      onClick={() => setMobileOpen(false)}
+                    >
+                      <Button
+                        appearance="subtle"
+                        icon={<PersonRegular />}
+                        className="w-full justify-start!"
+                      >
                         {user?.name ?? "Dashboard"}
                       </Button>
                     </Link>
-                    <Button appearance="subtle" icon={<SignOutRegular />} onClick={handleLogout} className="w-full justify-start!">
+                    <Button
+                      appearance="subtle"
+                      icon={<SignOutRegular />}
+                      onClick={handleLogout}
+                      className="w-full justify-start!"
+                    >
                       Logout
                     </Button>
                   </>
                 ) : (
                   <>
                     <Link href="/login" onClick={() => setMobileOpen(false)}>
-                      <Button appearance="subtle" icon={<PersonRegular />} className="w-full justify-start!">
+                      <Button
+                        appearance="subtle"
+                        icon={<PersonRegular />}
+                        className="w-full justify-start!"
+                      >
                         Login
                       </Button>
                     </Link>
