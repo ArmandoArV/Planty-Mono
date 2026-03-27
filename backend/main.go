@@ -10,9 +10,15 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/gofiber/fiber/v2/middleware/logger"
+	"github.com/joho/godotenv"
 )
 
 func main() {
+	// Load .env file if present
+	if err := godotenv.Load(); err != nil {
+		log.Println("No .env file found, using system environment variables")
+	}
+
 	// Database
 	config.ConnectDB()
 	models.Migrate()
@@ -25,7 +31,7 @@ func main() {
 	// CORS – allow origin from env var, default to localhost:3000 for dev
 	allowOrigin := os.Getenv("CORS_ORIGIN")
 	if allowOrigin == "" {
-		allowOrigin = "http://localhost:3000"
+		allowOrigin = "https://planty-frontend.vercel.app"
 	}
 	app.Use(cors.New(cors.Config{
 		AllowOrigins:  allowOrigin,

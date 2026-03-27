@@ -2,6 +2,8 @@
 
 import { Button, Text, Title1, Subtitle1 } from "@fluentui/react-components";
 import { motion } from "framer-motion";
+import Image from "next/image";
+import healthyPlant from "../../../public/Images/healthyPlant.png";
 
 export default function Hero() {
   return (
@@ -65,12 +67,14 @@ export default function Hero() {
           transition={{ duration: 0.7, ease: "easeOut", delay: 0.2 }}
           className="flex items-center justify-center"
         >
-          <div className="image-placeholder aspect-square w-full max-w-md rounded-3xl">
-            <div className="flex flex-col items-center gap-3">
-              <span className="text-5xl">🪴</span>
-              <span>Hero product image</span>
-            </div>
-          </div>
+          <Image
+            src={healthyPlant}
+            alt="Healthy plant in a Planty pot"
+            width={500}
+            height={500}
+            className="object-contain w-full max-w-md rounded-3xl"
+            priority
+          />
         </motion.div>
       </div>
 

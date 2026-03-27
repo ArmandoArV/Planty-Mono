@@ -2,25 +2,31 @@
 
 import { Text } from "@fluentui/react-components";
 import { motion } from "framer-motion";
+import Image, { StaticImageData } from "next/image";
+import healthyPlant from "../../../public/Images/healthyPlant.png";
+import notHealthyPlant from "../../../public/Images/notHealthyPlant.png";
 
-const steps = [
+const steps: { step: string; title: string; description: string; image: StaticImageData; alt: string }[] = [
   {
     step: "01",
     title: "Place Your Plant",
     description: "Drop any houseplant into the Planty pot — it fits most standard sizes.",
-    placeholder: "Step 1 illustration",
+    image: healthyPlant,
+    alt: "Healthy plant placed in pot",
   },
   {
     step: "02",
     title: "Connect the App",
     description: "Pair with the Planty app via Bluetooth. Setup takes less than 60 seconds.",
-    placeholder: "Step 2 illustration",
+    image: notHealthyPlant,
+    alt: "Plant needing care",
   },
   {
     step: "03",
     title: "Relax & Monitor",
     description: "Get real-time insights and smart alerts. Your plant practically cares for itself.",
-    placeholder: "Step 3 illustration",
+    image: healthyPlant,
+    alt: "Thriving plant after monitoring",
   },
 ];
 
@@ -69,12 +75,13 @@ export default function HowItWorks() {
               variants={itemVariants}
               className="flex flex-col items-center text-center"
             >
-              <div className="image-placeholder mb-6 aspect-square w-48">
-                <div className="flex flex-col items-center gap-2">
-                  <span className="text-2xl">🖼️</span>
-                  <span>{s.placeholder}</span>
-                </div>
-              </div>
+              <Image
+                src={s.image}
+                alt={s.alt}
+                width={192}
+                height={192}
+                className="mb-6 aspect-square w-48 object-contain rounded-2xl"
+              />
 
               <div className="mb-2 flex h-10 w-10 items-center justify-center rounded-full bg-accent text-sm font-bold text-white">
                 {s.step}

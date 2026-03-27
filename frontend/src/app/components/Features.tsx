@@ -2,28 +2,34 @@
 
 import { Card, CardHeader, Text } from "@fluentui/react-components";
 import { motion } from "framer-motion";
+import Image, { StaticImageData } from "next/image";
+import healthyPlant from "../../../public/Images/healthyPlant.png";
+import notHealthyPlant from "../../../public/Images/notHealthyPlant.png";
 
-const features = [
+const features: { icon: string; title: string; description: string; image: StaticImageData; alt: string }[] = [
   {
     icon: "💧",
     title: "Soil Moisture Tracking",
     description:
       "Real-time moisture sensors alert you when your plant needs water — no more guessing.",
-    placeholder: "Moisture dashboard image",
+    image: healthyPlant,
+    alt: "Healthy plant with optimal moisture",
   },
   {
     icon: "☀️",
     title: "Light Monitoring",
     description:
       "Know exactly how much sunlight your plant receives and get repositioning suggestions.",
-    placeholder: "Light chart image",
+    image: notHealthyPlant,
+    alt: "Plant needing more light",
   },
   {
     icon: "🌡️",
     title: "Temperature Alerts",
     description:
       "Instant notifications if conditions are too hot or cold for your specific plant species.",
-    placeholder: "Temperature alert image",
+    image: healthyPlant,
+    alt: "Plant thriving at ideal temperature",
   },
 ];
 
@@ -86,12 +92,13 @@ export default function Features() {
                   }
                 />
                 <div className="mt-4">
-                  <div className="image-placeholder aspect-video w-full">
-                    <div className="flex flex-col items-center gap-2">
-                      <span className="text-2xl">🖼️</span>
-                      <span>{f.placeholder}</span>
-                    </div>
-                  </div>
+                  <Image
+                    src={f.image}
+                    alt={f.alt}
+                    width={400}
+                    height={225}
+                    className="w-full aspect-video object-contain rounded-xl"
+                  />
                 </div>
               </Card>
             </motion.div>
